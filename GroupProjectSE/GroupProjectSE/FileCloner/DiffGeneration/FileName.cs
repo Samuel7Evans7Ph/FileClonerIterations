@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupProjectSE.FileCloner.DiffGenerator;
+namespace GroupProjectSE.FileCloner.DiffGeneration;
 public class FileName
 {
     // Property to store relative path and date

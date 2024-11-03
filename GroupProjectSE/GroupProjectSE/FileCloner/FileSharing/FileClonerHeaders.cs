@@ -43,10 +43,10 @@ public class FileClonerHeaders
     protected const string AckCloneFilesHeader = "<ACK_CLONE_FILES>";
 
     // the file to be cloned is saved in this field of the JSON object in the config.json
-    protected const string ReceiverConfigFilePathKey = "filePath";
-    protected const string ReceiverConfigSavePathKey = "savePath";
-    protected const string ReceiverConfigTimeStampKey = "timeStamp";
-    protected const string ReceiverConfigFromWhichServerKey = "fromWhichServer";
+    protected const string ReceiverConfigFilePathKey = "FilePath";
+    protected const string ReceiverConfigSavePathKey = "SavePath";
+    protected const string ReceiverConfigTimeStampKey = "Timestamp";
+    protected const string ReceiverConfigFromWhichServerKey = "FromWhichServer";
 
     protected const string SenderConfigFilePathKey = "filePath";
     protected const string SenderConfigSavePathKey = "savePath";

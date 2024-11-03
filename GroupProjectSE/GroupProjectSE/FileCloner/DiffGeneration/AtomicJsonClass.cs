@@ -6,9 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace GroupProjectSE.FileCloner.DiffGenerator;
+namespace GroupProjectSE.FileCloner.DiffGeneration;
 public class AtomicJsonClass
 {
 
@@ -16,12 +17,7 @@ public class AtomicJsonClass
     //public DateTime Timestamp { get; set; } // Matches the JSON key
 
 
-    public string FileName { get; set; }  // Matches the JSON key
+    public string FilePath { get; set; }  // Matches the JSON key
     public DateTime Timestamp { get; set; } // Matches the JSON key
-
-    AtomicJsonClass(string fileName, DateTime timestamp)
-    {
-        FileName = fileName;
-        Timestamp = timestamp;
-    }
 }
+

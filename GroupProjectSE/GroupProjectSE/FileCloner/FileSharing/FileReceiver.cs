@@ -13,7 +13,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Networking.Communication;
 using Networking;
-using GroupProjectSE.FileCloner.DiffGenerator;
+using GroupProjectSE.FileCloner.DiffGeneration;
 
 namespace GroupProjectSE.FileCloning.FileSharing;
 
