@@ -13,6 +13,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Networking.Communication;
 using Networking;
+using GroupProjectSE.FileCloner.DiffGenerator;
 
 namespace GroupProjectSE.FileCloning.FileSharing;
 
@@ -37,6 +38,8 @@ public class FileReceiver : FileClonerHeaders, IFileReceiver, INotificationHandl
     private string _requestToSendFilePath = ".\\requestToSend.json";
     private string _diffFilePath = ".\\diffFile.json";
 
+    private DiffGenerator _diffGenerator;
+
     private List<string> _requestFilesPathList;
 
     public FileReceiver() : base(CurrentModuleName)
@@ -58,17 +61,23 @@ public class FileReceiver : FileClonerHeaders, IFileReceiver, INotificationHandl
         {
             _responseOfRequestConfigFilePath = $"{_configDirectory}\\responseOfRequestConfig.json";
             _requestToSendFilePath = $"{_configDirectory}\\requestToSend.json";
+        }
+        if (Directory.Exists(_diffDirectory))
+        {
             _diffFilePath = $"{_configDirectory}\\diffFile.json";
         }
-
         if (Directory.Exists(_userConfigDirectory))
         {
             _receiverConfigFilePath = $"{_userConfigDirectory}\\requestConfig.json";
         }
+
         CreateAndCloseFile(_receiverConfigFilePath);
         CreateAndCloseFile(_responseOfRequestConfigFilePath);
         CreateAndCloseFile(_requestToSendFilePath);
         CreateAndCloseFile(_diffFilePath);
+
+        _diffGenerator = new(_logger, _diffFilePath, _diffFilePath);
+
 
         _clientIdToSocket = _fileReceiverServer.GetClientList();
 
@@ -105,7 +114,22 @@ public class FileReceiver : FileClonerHeaders, IFileReceiver, INotificationHandl
     {
         _logger.Log("Generating Diff");
         // Evans' code should be called from here, as a thread or something
-        throw new NotImplementedException();
+
+        List<string> fileNames = new List<string>();
+
+        foreach (string filePath in Directory.GetFiles(_diffDirectory))
+        {
+            if (!filePath.Contains('_'))
+            {
+                // only add filenames of format IP_Port.json
+                continue;
+            }
+            fileNames.Add(filePath);
+        }
+
+        Thread generateDiffThread = new Thread(() => _diffGenerator.GenerateSummary(fileNames));
+        generateDiffThread.Start();
+
     }
 
     public void RequestToCloneFiles()
@@ -209,7 +233,8 @@ public class FileReceiver : FileClonerHeaders, IFileReceiver, INotificationHandl
     /// <param name="fromWhichServer"></param>
     private void SaveResponse(string data, string fromWhichServer)
     {
-        string saveFileName = $"{_configDirectory}\\{fromWhichServer}.json";
+        // string saveFileName = $"{_configDirectory}\\{fromWhichServer}.json";
+        string saveFileName = $"{_diffDirectory}\\{fromWhichServer}.json";
         _logger.Log($"Saving Response {data} from server {fromWhichServer} in file {saveFileName}");
 
         if (!_syncLockForSavingResponse.ContainsKey(saveFileName))

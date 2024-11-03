@@ -31,6 +31,11 @@ public class FileClonerHeaders
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "GroupProjectSE", "FileCloner", "FileClonerUserConfig"
         );
+    protected string _diffDirectory =
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "GroupProjectSE", "FileCloner", "FileClonerConfig", "FileClonerDiffDirectory"
+        );
 
     protected const string FileRequestHeader = "<FILE_REQUESTS>";
     protected const string AckFileRequestHeader = "<ACK_FILE_REQUESTS>";
@@ -65,30 +70,25 @@ public class FileClonerHeaders
 
         _logger.Log("FileClonerHeaders Constructing");
 
+        CreateDirectory(_configDirectory);
+        CreateDirectory(_userConfigDirectory);
+        CreateDirectory(_diffDirectory);
+
+    }
+
+    private void CreateDirectory(string directoryName)
+    {
         try
         {
-            if (!Directory.Exists(_configDirectory))
+            if (!Directory.Exists(directoryName))
             {
-                Directory.CreateDirectory(_configDirectory);
+                Directory.CreateDirectory(directoryName);
             }
         }
         catch (Exception ex)
         {
             _logger.Log(ex.Message);
         }
-
-        try
-        {
-            if (!Directory.Exists(_userConfigDirectory))
-            {
-                Directory.CreateDirectory(_userConfigDirectory);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.Log(ex.Message);
-        }
-
     }
 
     /// <summary>
